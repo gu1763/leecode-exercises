@@ -1,0 +1,105 @@
+/*两数之和 II - 输入有序数组
+给你一个下标从 1 开始的整数数组?numbers ，该数组已按 非递减顺序排列? ，请你从数组中找出满足相加之和等于目标数?target 的两个数。如果设这两个数分别是 numbers[index1] 和 numbers[index2] ，则 1 <= index1 < index2 <= numbers.length 。
+
+以长度为 2 的整数数组 [index1, index2] 的形式返回这两个整数的下标 index1 和 index2。
+
+你可以假设每个输入 只对应唯一的答案 ，而且你 不可以 重复使用相同的元素。
+
+你所设计的解决方案必须只使用常量级的额外空间。*/
+
+作者：LeetCode
+链接：https://leetcode.cn/leetbook/read/array-and-string/cnkjg/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+
+//自己写的代码，不是很好。
+/*void seq(int left, int right, int* s) //快速排序函数。
+{
+    if (left >= right) return;
+    
+    int i = left;
+    int j = right;
+    int m = (i + j) / 2;
+    
+    for (; i < m && j > m; i++, j--) {
+        if (s[i] > s[j]) {
+            int temp = s[i];
+            s[i] = s[j];
+            s[j] = temp;
+        }
+    }
+    
+    for (int k = left; k < right; k++) {
+        if (s[k] > s[k + 1]) {
+            int temp = s[k];
+            s[k] = s[k + 1];
+            s[k + 1] = temp;
+        }
+    }
+    
+    if (left < m) seq(left, m, s);
+    if (m + 1 < right) seq(m + 1, right, s);
+}*/
+
+int* twoSum(int* numbers, int numbersSize, int target, int* returnSize) 
+{
+    int* result=malloc(2*sizeof(int));
+    *returnSize=2;
+
+    /*seq(0,numbersSize-1,numbers);//先进行快速排序。*/
+
+    int i=0;
+    int j=numbersSize-1;
+    while(i<j)
+    {
+        if(numbers[i]+numbers[j]==target)//找到时返回。
+        {
+            result[0]=i+1,result[1]=j+1;
+            return result;
+        }
+        else if(numbers[i]+numbers[j]<target)//如果比目标小，把小的数变大。
+        {
+            i++;
+        }
+        else if(numbers[i]+numbers[j]>target)//如果比目标大，把大的数变小。
+        {
+            j--;
+        }
+    }
+    return result;
+}
+
+//突然发现这题其实根本不用排序，去掉之后还是很快的而且占用内存比较少。
+
+//deepseek的解答，双指针法。快了很多，但内存占用比较多。
+int* twoSum(int* numbers, int numbersSize, int target, int* returnSize)
+{
+    // 分配结果数组内存
+    int* result = (int*)malloc(2 * sizeof(int));
+    *returnSize = 2;
+    
+    int left = 0;                    // 左指针，指向数组起始位置
+    int right = numbersSize - 1;     // 右指针，指向数组末尾位置
+    
+    while (left < right) {
+        int sum = numbers[left] + numbers[right];
+        
+        if (sum == target) {
+            // 找到目标，返回下标（从1开始）
+            result[0] = left + 1;
+            result[1] = right + 1;
+            return result;
+        } else if (sum < target) {
+            // 和太小，左指针右移以增加和
+            left++;
+        } else {
+            // 和太大，右指针左移以减少和
+            right--;
+        }
+    }
+    
+    // 理论上不会执行到这里，因为题目保证有唯一解
+    return result;
+}

@@ -1,0 +1,113 @@
+/* 十进制整数转换为二进制数
+读入一个十进制整数，将其转换为二进制数输出。*/
+
+//法一：用数学方法进行转化
+
+#include<stdio.h>
+void bi(int n,int s[],int f);    	//将整数转化为二进制，并将每位数字都存到s[]中的函数。
+void plus(int s[],int i);	//对负数将反码转为补码的函数。
+void pr(int s[]);		//将数字打印输出的函数。
+
+int main()
+{
+    int s[16];
+    int n;
+    int flag=1;
+
+    scanf("%d",&n);
+    if(n<0)
+    {
+        n=-n;
+        flag=0;
+    }
+
+    if(flag)			//初始化数组。
+    {
+        for(int i=0;i<16;i++)
+            s[i]=0;
+    }
+    else{
+        for(int i=0;i<16;i++)
+            s[i]=1;
+    }
+
+    bi(n,s,flag);
+
+    if(!flag) plus(s,0);		//如果是负数，给反码补码。
+
+    pr(s);
+
+    return 0;
+}
+
+void bi(int n,int s[],int f)
+{
+    int i=0;
+    while(n>0&&i<16)
+    {
+        if(f)
+            s[i++]=n%2;
+        else
+            s[i++]=1-n%2;	//如果是负数，取反。
+        n=n/2;
+    }
+}
+
+void plus(int s[],int i)
+{
+    s[i]+=1;		//补码进位用迭代进行
+    if(s[i]>1&&i<16)
+    {
+        s[i]=0;
+        plus(s,i+1);
+    }
+    else return;		//不再进位或溢出时返回。
+}
+
+void pr(int s[])
+{
+    for(int j=15;j>=0;j--)
+        printf("%d",s[j]);
+}
+
+
+//法二：直接获取内存中存储的形式
+#include <stdio.h>
+int main() 
+{
+    int x;
+    scanf("%d", &x);
+
+    unsigned n = *(unsigned*)&x;	//将x的地址强行转换为指向unsigned类型的指针，与法三n=65536+n的目的一样。
+
+    for (int i = 15; i >= 0; i--) {
+        printf("%d", (n >> i) & 1);	//n每次右移i位，与1进行与运算，则得到n右移后最后一位数字（1或0），i从15递减，则可以将二进制数从高位到低位依次打印出来。
+    }
+    printf("\n");
+
+    return 0;
+}
+
+
+//法三：对负数。加上一些数字以补码（deep seek）
+#include <stdio.h>
+
+void decimalToBinary(int n) {
+    // 处理负数情况 - 使用补码表示
+    if (n < 0) {
+        n = 65536 + n;  // 16位补码：负数 = 65536 + 负数
+    }
+    
+    // 输出16位二进制
+    for (int i = 15; i >= 0; i--) {
+        printf("%d", (n >> i) & 1); 	//同样是直接从存储空间获取？
+    }
+    printf("\n");
+}
+
+int main() {
+    int decimal;
+    scanf("%d", &decimal);
+    decimalToBinary(decimal);
+    return 0;
+}

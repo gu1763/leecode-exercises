@@ -1,0 +1,59 @@
+/*1 杨辉三角
+给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。
+
+在「杨辉三角」中，每个数是它左上方和右上方的数的和。*/
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+int** generate(int numRows, int* returnSize, int** returnColumnSizes) 
+{
+    int** result = (int**)malloc(numRows * sizeof(int*));	//使用二维数组存储。
+    *returnColumnSizes = (int*)malloc(numRows * sizeof(int));	//returnColumnSizes也是一个二维数组。
+    *returnSize = numRows;
+    
+    for (int i = 0; i < numRows; i++) 
+{
+        result[i] = (int*)malloc((i + 1) * sizeof(int));	//第i行有i+1个数，因为i从0开始。
+        (*returnColumnSizes)[i] = i + 1;
+        
+        result[i][0] = 1;		//先定义两边，因为两边都是1，且不能由上方两数相加得到。
+        result[i][i] = 1;
+        
+        for (int j = 1; j < i; j++) {
+            result[i][j] = result[i-1][j-1] + result[i-1][j];
+        }
+    }
+    
+    return result;
+}
+
+/*杨辉三角 II
+给定一个非负索引 rowIndex，返回「杨辉三角」的第 rowIndex 行。
+
+在「杨辉三角」中，每个数是它左上方和右上方的数的和。*/
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* getRow(int rowIndex, int* returnSize) 
+{
+    *returnSize = rowIndex + 1;	//注意第i行有i+1个元素。
+    int* row = (int*)malloc((rowIndex + 1) * sizeof(int));	//分配空间。
+    
+    for (int i = 0; i <= rowIndex; i++) 	//将元素初始值均设为0；防止后续计算时出错。
+    {
+        row[i] = 0;
+    }
+    row[0] = 1;
+    
+    for (int i = 1; i <= rowIndex; i++) 	//第i行第j个元素为cij。
+    {
+        for (int j = i; j >= 1; j--) {		//从后往前更新，防止覆盖之前的值。
+            row[j] += row[j-1];		//在一行中就实现了下一行元素为上一行的之和的运算。
+        }
+    }
+    return row;
+}

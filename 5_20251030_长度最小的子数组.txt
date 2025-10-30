@@ -1,0 +1,40 @@
+长度最小的子数组
+给定一个含有 n 个正整数的数组和一个正整数 target 。
+
+找出该数组中满足其总和大于等于 target 的长度最小的 子数组 [numsl, numsl+1, ..., numsr-1, numsr] ，并返回其长度。如果不存在符合条件的子数组，返回 0 。
+
+ 
+
+作者：LeetCode
+链接：https://leetcode.cn/leetbook/read/array-and-string/c0w4r/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+int minSubArrayLen(int target, int* nums, int numsSize) 
+{
+    int *head=nums;
+    int *tail=nums;
+    int *end=nums+numsSize-1;	//注意这里要减1，否则会溢出！！！
+    int shortest=numsSize+1;
+    int sum=*tail;
+    while(tail<=end&&head<=tail)
+    {
+        if(sum>=target)
+        {
+            if(tail-head<shortest)
+            {
+                shortest=tail-head+1;
+                if(shortest==1) return 1;
+            }
+            sum-=*head;	//不必左移tail，因为这里其实是相对固定tail，对此时的tail左移head来找到最小长度，tail一直右移，head也一直右移。
+            head++;
+        }
+        else
+        {
+            if(tail<end) sum+=*++tail;	//防止溢出。
+            else break;
+        }
+    }
+    if(shortest>numsSize) return 0;
+    return shortest;
+}

@@ -1,0 +1,66 @@
+反转字符串中的单词 III
+给定一个字符串 s ，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。
+
+//新建字符串以存储改动
+char* reverseWords(char* s) 
+{
+    char* head=s;
+    char* end=s;
+    char* ret=malloc(strlen(s)+1);
+    char* p=ret;
+    while(*end!='\0')
+    {
+        if(*end==' '||*(end+1)=='\0')	//注意这里的end+1，防止为'\0'后end再增加出错。
+        {
+            char* temp;
+            if(*(end+1)=='\0') temp=end;
+            else temp=end-1;
+            while(temp>=head)
+            {
+                *ret++=*temp--;
+            }
+            if(*end==' ') *ret++=' ';
+            else *ret='\0';
+            head=++end;
+        }
+        else
+        {
+            end++;
+        }
+    }
+    return p; 
+}
+
+
+//在原字符串的基础上改动（ai写的）
+ char* reverseWords(char* s) {
+    char* head = s;
+    char* end = s;
+    while (*end != '\0') {
+        if (*end == ' ') {
+            // 反转从head到end-1的单词（不要直接用head）
+            char* left = head;
+            char* right = end - 1;
+            while (left < right) {
+                char temp = *left;
+                *left = *right;
+                *right = temp;
+                left++;
+                right--;
+            }
+            head = end + 1; // 下一个单词的开头
+        }
+        end++;
+    }
+    // 反转最后一个单词（因为最后一个单词后面没有空格，而是结束符）
+    char* left = head;
+    char* right = end - 1;	//此时end指向'\0'
+    while (left < right) {
+        char temp = *left;
+        *left = *right;
+        *right = temp;
+        left++;
+        right--;
+    }
+    return s;
+}

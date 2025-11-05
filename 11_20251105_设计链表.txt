@@ -1,0 +1,96 @@
+你可以选择使用单链表或者双链表，设计并实现自己的链表。
+
+单链表中的节点应该具备两个属性：val 和 next 。val 是当前节点的值，next 是指向下一个节点的指针/引用。
+
+如果是双向链表，则还需要属性 prev 以指示链表中的上一个节点。假设链表中的所有节点下标从 0 开始。
+
+实现 MyLinkedList 类：
+
+MyLinkedList() 初始化 MyLinkedList 对象。
+int get(int index) 获取链表中下标为 index 的节点的值。如果下标无效，则返回 -1 。
+void addAtHead(int val) 将一个值为 val 的节点插入到链表中第一个元素之前。在插入完成后，新节点会成为链表的第一个节点。
+void addAtTail(int val) 将一个值为 val 的节点追加到链表中作为链表的最后一个元素。
+void addAtIndex(int index, int val) 将一个值为 val 的节点插入到链表中下标为 index 的节点之前。如果 index 等于链表的长度，那么该节点会被追加到链表的末尾。如果 index 比长度更大，该节点将 不会插入 到链表中。
+void deleteAtIndex(int index) 如果下标有效，则删除链表中下标为 index 的节点。
+ 
+
+
+
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+typedef struct {
+    struct ListNode *head;	//头节点
+    int size;		//记录链表中实际数据节点的个数
+} MyLinkedList;
+
+struct ListNode *ListNodeCreat(int val) {	//创建节点的函数
+    struct ListNode * node = (struct ListNode *)malloc(sizeof(struct ListNode));	//分配空间
+    node->val = val;		//赋值
+    node->next = NULL;	//下一个指向空指针
+    return node;
+}
+
+MyLinkedList* myLinkedListCreate() {		//创建链表
+    MyLinkedList * obj = (MyLinkedList *)malloc(sizeof(MyLinkedList));		//obj是zhengge链表的管理器，包含头部指针和记录链表长度的变量
+    obj->head = ListNodeCreat(0);	//头指针指向值为0的一个节点
+    obj->size = 0;
+    return obj;
+}
+
+int myLinkedListGet(MyLinkedList* obj, int index) {	//获取要求节点得知的函数
+    if (index < 0 || index >= obj->size) {		//不符合要求，提前返回
+        return -1;
+    }
+    struct ListNode *cur = obj->head;
+    for (int i = 0; i <= index; i++) {
+        cur = cur->next;
+    }
+    return cur->val;
+}
+
+void myLinkedListAddAtIndex(MyLinkedList* obj, int index, int val) {		//添加节点的函数
+    if (index > obj->size) {
+        return;
+    }
+    index = MAX(0, index);
+    obj->size++;		//接了新节点，size+1
+    struct ListNode *pred = obj->head;
+    for (int i = 0; i < index; i++) {
+        pred = pred->next;
+    }
+    struct ListNode *toAdd = ListNodeCreat(val);  		//创建要加入的节点
+    toAdd->next = pred->next;
+    pred->next = toAdd;				//插入此节点
+}
+
+void myLinkedListAddAtHead(MyLinkedList* obj, int val) {		//把节点加到头部
+    myLinkedListAddAtIndex(obj, 0, val);				
+}
+
+void myLinkedListAddAtTail(MyLinkedList* obj, int val) {		//把节点加到尾部
+    myLinkedListAddAtIndex(obj, obj->size, val);
+}
+
+void myLinkedListDeleteAtIndex(MyLinkedList* obj, int index) {	//删除节点的函数
+    if (index < 0 || index >= obj->size) {
+        return;
+    }
+    obj->size--;
+    struct ListNode *pred = obj->head;
+    for (int i = 0; i < index; i++) {
+        pred = pred->next;
+    }
+    struct ListNode *p = pred->next;		//将要删除节点的前后节点相连
+    pred->next = pred->next->next;
+    free(p);
+}
+
+void myLinkedListFree(MyLinkedList* obj) {	//释放空间的函数
+    struct ListNode *cur = NULL, *tmp = NULL;
+    for (cur = obj->head; cur;) {
+        tmp = cur;
+        cur = cur->next;
+        free(tmp);			//遍历所有节点，一个个释放
+    }
+    free(obj); 			//释放obj
+}

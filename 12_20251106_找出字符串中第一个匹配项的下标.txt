@@ -1,0 +1,108 @@
+给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回  -1 。
+
+//KMP算法
+int strStr(char* haystack, char* needle) 
+{
+    if(needle[0]=='\0') return 0;
+    int len_n=0;
+    while(needle[len_n]!='\0') len_n++;
+
+    if(haystack[0]=='\0') return 0;
+    int len_h=0;
+    while(haystack[len_h]!='\0') len_h++;
+
+    if(len_n>len_h) return -1;
+
+    int next[len_n];			//构造next数组
+    next[0]=0;
+    int pre=0;			//最长前后缀长度
+    int i=1;				//从第二个数开始算，因为第一个时肯定为0
+    while(i<len_n)
+    {
+        if(needle[i]==needle[pre])
+        {
+            pre++;
+            next[i]=pre;
+            i++;
+        }
+        else
+        {
+            if(pre!=0)
+            {
+                pre=next[pre-1];
+            }
+            else{
+                next[i]=0;i++;
+            }
+        }
+    }
+
+    i=0;
+    int j=0;
+    while(i<len_h)
+    {
+        if(haystack[i]==needle[j])
+        {
+            i++;
+            j++;
+        }
+        if(j==len_n)
+        {
+            return i-j;
+        }
+        else if(i<len_h&&haystack[i]!=needle[j])
+        {
+            if(j!=0) j=next[j-1];		//j回退时参照next数组中存储的值
+            else i++;
+        }
+    }
+    return -1;
+}
+
+//简化版KMP
+int strStr(char* haystack, char* needle) 
+{
+    // 处理边界情况
+    if (needle[0] == '\0') return 0;
+    if (haystack[0] == '\0') return -1;
+    
+    // 计算字符串长度
+    int len_n = 0;
+    while (needle[len_n] != '\0') len_n++;
+    
+    int len_h = 0;
+    while (haystack[len_h] != '\0') len_h++;
+    
+    if (len_n > len_h) return -1;
+    
+    // 构建 next 数组
+    int next[len_n];
+    next[0] = 0;
+    int j = 0;
+    
+    for (int i = 1; i < len_n; i++) {
+        while (j > 0 && needle[i] != needle[j]) {
+            j = next[j - 1];
+        }
+        if (needle[i] == needle[j]) {
+            j++;
+        }
+        next[i] = j;
+    }
+    
+    // 使用 KMP 算法进行匹配
+    j = 0;
+    for (int i = 0; i < len_h; i++) {
+        while (j > 0 && haystack[i] != needle[j]) {
+            j = next[j - 1];
+        }
+        if (haystack[i] == needle[j]) {
+            j++;
+        }
+        if (j == len_n) {
+            return i - len_n + 1;
+        }
+    }
+    
+    return -1;
+}

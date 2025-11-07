@@ -1,0 +1,59 @@
+给定两个字符串 s 和 t ，编写一个函数来判断 t 是否是 s 的 字母异位词。
+
+//计算所有字母
+bool isAnagram(char* s, char* t) 
+{
+    // 如果长度不同，直接返回false
+    if (strlen(s) != strlen(t)) {
+        return false;
+    }
+    
+    int count[26] = {0};  // 只包含小写字母
+    
+    // 统计字符串s中每个字符的出现次数
+    for (int i = 0; s[i] != '\0'; i++) {
+        count[s[i] - 'a']++;
+    }
+    
+    // 减去字符串t中每个字符的出现次数
+    for (int i = 0; t[i] != '\0'; i++) {
+        count[t[i] - 'a']--;
+    }
+    
+    // 检查所有计数是否为0
+    for (int i = 0; i < 26; i++) {
+        if (count[i] != 0) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+//排序法
+#include <stdlib.h>
+#include <string.h>
+
+int compare(const void* a, const void* b) {		
+    return *(char*)a - *(char*)b;			//相同则返回0
+}
+
+bool isAnagram(char* s, char* t) {
+    if (strlen(s) != strlen(t)) {		//先复制字符串
+        return false;
+    }
+    
+    // 创建副本进行排序
+    char* s_sorted = strdup(s);		//使用库中函数进行排序
+    char* t_sorted = strdup(t);
+    
+    qsort(s_sorted, strlen(s), sizeof(char), compare);		//快速排序
+    qsort(t_sorted, strlen(t), sizeof(char), compare);
+    
+    bool result = strcmp(s_sorted, t_sorted) == 0;		//比较是否相同
+    
+    free(s_sorted);
+    free(t_sorted);
+    
+    return result;
+}

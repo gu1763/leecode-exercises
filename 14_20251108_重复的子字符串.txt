@@ -1,0 +1,32 @@
+给定一个非空的字符串 s ，检查是否可以通过由它的一个子串重复多次构成。
+
+//遍历所有子字符串
+bool repeatedSubstringPattern(char* s) 
+{
+    int len,flag,sublen;
+    while(s[len]!='\0') len++;
+
+    for(sublen=1;sublen<len;sublen++)		//遍历所有长度的子字符串
+    {
+        if((len%sublen)!=0) continue;		//字符串长度可以整除子字符串长度时再继续比较
+        else
+        {
+            int i=0;
+            flag=1;
+            for(i=0;i<len;i++)
+            {
+                if(s[i]!=s[i%sublen])
+                {
+                    flag=0;
+                    break;
+                }
+                else if(i==len) break;	
+            }
+            if(i==len&&flag) break;	//注意这里找到符合的字字符串时，要两层才能跳出
+        }
+    
+    }
+    if(flag&&sublen<len) return true;
+    else return false;
+
+}

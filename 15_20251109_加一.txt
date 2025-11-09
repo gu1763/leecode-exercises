@@ -1,0 +1,43 @@
+给定一个表示 大整数 的整数数组 digits，其中 digits[i] 是整数的第 i 位数字。这些数字按从左到右，从最高位到最低位排列。这个大整数不包含任何前导 0。
+
+将大整数加 1，并返回结果的数字数组。
+
+//递归函数进位
+int flag=0;
+void add(int* digits,int x)
+{
+    if(digits[x]+1>9)
+    {
+        digits[x]=0;
+        if(x>0) add(digits,x-1);
+        else
+        {
+            flag=1;
+        }
+    }
+    else
+    {
+        digits[x]=digits[x]+1;
+    }
+}
+int* plusOne(int* digits, int digitsSize, int* returnSize) 
+{
+    flag=0;
+    add(digits,digitsSize-1);
+
+    if(flag==0)
+    {
+        *returnSize=digitsSize;
+        return digits;
+    }
+    else{
+        int* returnSiz=malloc((digitsSize+1)*sizeof(int));
+        returnSiz[0]=1;
+        *returnSize=digitsSize+1;
+        for(int i=0;i<digitsSize;i++) returnSiz[i+1]=digits[i];
+        return returnSiz;
+    }
+}
+
+
+ 

@@ -1,0 +1,31 @@
+给你一个字符串 s ，将该字符串中的大写字母转换成相同的小写字母，返回新的字符串。
+
+//c
+char* toLowerCase(char* s) 
+{
+    char* i=s;
+    while(*i!='\0')
+    {
+        if(*i>='A'&&*i<='Z')
+        {
+            *i+='a'-'A';
+        }
+        i++;
+    }
+    return s;
+}
+
+//python
+class Solution:
+    def toLowerCase(self, str: str) -> str:
+        return str.lower(）		//内置函数lower
+
+class Solution:
+    def toLowerCase(self, str: str) -> str:
+        s=[]
+        for i in str:
+            if 'A'<=i<='Z':
+                s.append(chr(ord(i)+32))
+            else:
+                s.append(i)
+        return ''.join(s)			//使用join函数将s列表中元素拼接起来成为字符串，使用‘’中什么也没有的东西来间隔

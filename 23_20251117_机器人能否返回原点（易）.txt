@@ -1,0 +1,38 @@
+在二维平面上，有一个机器人从原点 (0, 0) 开始。给出它的移动顺序，判断这个机器人在完成移动后是否在 (0, 0) 处结束。
+
+移动顺序由字符串 moves 表示。字符 move[i] 表示其第 i 次移动。机器人的有效动作有 R（右），L（左），U（上）和 D（下）。
+
+如果机器人在完成所有动作后返回原点，则返回 true。否则，返回 false。
+
+注意：机器人“面朝”的方向无关紧要。 “R” 将始终使机器人向右移动一次，“L” 将始终向左移动等。此外，假设每次移动机器人的移动幅度相同。
+//c
+bool judgeCircle(char* moves) 
+{
+    int r=0,u=0;
+    while(*moves!='\0')
+    {
+        if(*moves=='R') r++;
+        else if(*moves=='L') r--;
+        else if(*moves=='U') u++;
+        else if(*moves=='D') u--;
+        moves++;
+    }
+    return r==0&&u==0;
+}
+//python
+class Solution:
+    def judgeCircle(self, moves: str) -> bool:
+        a=0
+        b=0
+        for m in moves:
+            if(m=='R'):
+                a+=1
+            if(m=='L'):
+                a-=1
+            if(m=='U'):
+                b+=1
+            if(m=='D'):
+                b-=1
+        return a==0 and b==0
+        
+ 

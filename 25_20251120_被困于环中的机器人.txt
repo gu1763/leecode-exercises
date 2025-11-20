@@ -1,0 +1,47 @@
+在无限的平面上，机器人最初位于 (0, 0) 处，面朝北方。注意:
+
+北方向 是y轴的正方向。
+南方向 是y轴的负方向。
+东方向 是x轴的正方向。
+西方向 是x轴的负方向。
+机器人可以接受下列三条指令之一：
+
+"G"：直走 1 个单位
+"L"：左转 90 度
+"R"：右转 90 度
+机器人按顺序执行指令 instructions，并一直重复它们。
+
+只有在平面中存在环使得机器人永远无法离开时，返回 true。否则，返回 false。
+
+ //c
+bool isRobotBounded(char* instructions) 
+{
+    int x=0,y=0;
+    int dir=0;			//标记方向
+    char* ins=instructions;
+    for(int i=0;i<4;i++)		//因为只能上下左右走，所以如果能循环，一定以四次为周期。
+    {
+        while(*ins!='\0')
+        {
+            if(*ins=='G')
+            {
+                if(dir==0) y++;
+                else if(dir==1) x++;
+                else if(dir==2) y--;
+                else x--; 
+            }
+            else if(*ins=='L')
+            {
+                dir=(dir+3)%4;		//防止出现负数（-1）换为+3
+            }
+            else if(*ins=='R')
+            {
+                dir=(dir+1)%4;
+            }
+            ins++;
+        }
+        ins=instructions;
+        if(x==0&&y==0) return true;
+    }
+    return false;
+}

@@ -1,0 +1,47 @@
+给你一个 m x n 的整数网格 accounts ，其中 accounts[i][j] 是第 i​​​​​​​​​​​​ 位客户在第 j 家银行托管的资产数量。返回最富有客户所拥有的 资产总量 。
+
+客户的 资产总量 就是他们在各家银行托管的资产数量之和。最富有客户就是 资产总量 最大的客户。
+
+//c
+int maximumWealth(int** accounts, int accountsSize, int* accountsColSize) 		//注意这里accountsSize是第一维度的数目，accountsColSize是一个数组，存储第二位维数
+{
+    int max=0;
+    for(int i=0;i<accountsSize;i++)
+    {
+        int s=0;
+        for(int j=0;j<*accountsColSize;j++)
+        {
+            s+=accounts[i][j];
+        }
+        if(s>max) max=s;
+
+///此处也可以加入accountsColSize++；因为第二位长度不一定相同。但可能因为第二微长度固定了或者多出的全是0，不加也没有影响。
+
+    }
+    return max;
+}
+
+
+
+//python3 力扣官方题解
+class Solution:
+    def maximumWealth(self, accounts: List[List[int]]) -> int:
+        return max(map(sum, accounts))
+// map() 函数将 sum 函数应用到 accounts 中的每个元素
+· 相当于：[sum([1,2,3]), sum([4,5,6]), sum([7,8,9])]
+· 结果：[6, 15, 24]（每个客户的总财富）
+
+ max(...) 找出列表中的最大值
+· max([6, 15, 24]) → 24
+
+自己写的
+class Solution:
+    def maximumWealth(self, accounts: List[List[int]]) -> int:
+        max=0
+        for i in range(0,len(accounts)):
+            s=0
+            for j in range(0,len(accounts[i])):		//注意这里和c语言不同，必须要计算每个小数组的长度，不能都用第一个的（存储方式不同？c语言的第二维长度必须要实现指出，所以所有小数组都是用第一个的长度也可以？）
+                s+=accounts[i][j]
+            if s>max:
+                max=s
+        return max

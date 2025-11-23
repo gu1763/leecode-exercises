@@ -1,0 +1,107 @@
+给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。
+
+//c
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* spiralOrder(int** matrix, int matrixSize, int* matrixColSize, int* returnSize) 
+{
+    int n=matrixSize*(*matrixColSize);
+    int ax=0,bx=*matrixColSize-1;
+    int ay=0,by=matrixSize-1;
+    int x=0,y=0;
+    int dir=0,ind=0;
+    *returnSize=n;
+    int* result=malloc((n+1)*sizeof(int));
+    for(int i=0;i<n;i++)
+    {
+        if(dir==0)
+        {
+            if(x==bx)			//也可以不用xy一步步移动，直接在各行各列遍历。
+            {
+                dir=1;
+                result[ind++]=matrix[y][x];
+                y++;
+                ay++;
+            }
+            else
+            {
+                result[ind++]=matrix[y][x];
+                x++;
+            }
+        }
+        else if(dir==1)
+        {
+            if(y==by)
+            {
+                dir=2;
+                result[ind++]=matrix[y][x];
+                x--;
+                bx--;
+            }
+            else
+            {
+                result[ind++]=matrix[y][x];
+                y++;
+            }
+        }
+        else if(dir==2)
+        {
+            if(x==ax)
+            {
+                dir=3;
+                result[ind++]=matrix[y][x];
+                y--;
+                by--;
+            }
+            else
+            {
+                result[ind++]=matrix[y][x];
+                x--;
+            }
+        }
+        else if(dir==3)
+        {
+            if(y==ay)
+            {
+                dir=0;
+                result[ind++]=matrix[y][x];
+                x++;
+                ax++;
+            }
+            else
+            {
+                result[ind++]=matrix[y][x];
+                y--;
+            }
+        }
+    }
+    return result;
+}
+
+//python     		//思路相似
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        if not matrix or not matrix[0]:
+            return list()
+        
+        rows, columns = len(matrix), len(matrix[0])
+        order = list()
+        left, right, top, bottom = 0, columns - 1, 0, rows - 1
+        while left <= right and top <= bottom:
+            for column in range(left, right + 1):
+                order.append(matrix[top][column])
+            for row in range(top + 1, bottom + 1):
+                order.append(matrix[row][right])
+            if left < right and top < bottom:
+                for column in range(right - 1, left, -1):
+                    order.append(matrix[bottom][column])
+                for row in range(bottom, top, -1):
+                    order.append(matrix[row][left])
+            left, right, top, bottom = left + 1, right - 1, top + 1, bottom - 1
+        return order
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/spiral-matrix/solutions/275393/luo-xuan-ju-zhen-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

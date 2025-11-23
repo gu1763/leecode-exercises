@@ -1,0 +1,67 @@
+73. 矩阵置零
+已解答
+中等
+相关标签
+premium lock icon
+相关企业
+提示
+给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用 原地 算法。
+
+ //c
+void setZeroes(int** matrix, int matrixSize, int* matrixColSize) 
+{
+    int* R=malloc(matrixSize*sizeof(int));
+    int* C=malloc((*matrixColSize)*sizeof(int));
+    for(int i=0;i<matrixSize;i++) R[i]=0;
+    for(int j=0;j<*matrixColSize;j++) C[j]=0;
+    for(int i=0;i<matrixSize;i++)
+    {
+        for(int j=0;j<*matrixColSize;j++)
+        {
+            if(matrix[i][j]==0)
+            {
+                R[i]=1;
+                C[j]=1;
+            }
+        }
+    }
+    for(int i=0;i<matrixSize;i++)
+    {
+        if(R[i])
+        {
+            for(int j=0;j<*matrixColSize;j++)
+            {
+                matrix[i][j]=0;
+            }
+        }
+    }
+    for(int j=0;j<*matrixColSize;j++)
+    {
+        if(C[j])
+        {
+            for(int i=0;i<matrixSize;i++)
+            {
+                matrix[i][j]=0;
+            }
+        }
+    }
+}
+//python
+class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        r=[]
+        c=[]
+        for i in range(0,len(matrix)):
+            for j in range(0,len(matrix[i])):
+                if matrix[i][j]==0:
+                    r.append(i)
+                    c.append(j)
+        for x in r:
+            for y in range(0,len(matrix[x])):
+                matrix[x][y]=0
+        for y in c:
+            for x in range(0,len(matrix)):
+                matrix[x][y]=0

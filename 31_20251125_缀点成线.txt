@@ -1,0 +1,15 @@
+给定一个整数数组 coordinates ，其中 coordinates[i] = [x, y] ， [x, y] 表示横坐标为 x、纵坐标为 y 的点。请你来判断，这些点是否在该坐标系中属于同一条直线上。
+
+ //c
+bool checkStraightLine(int** coordinates, int coordinatesSize, int* coordinatesColSize) 
+{
+    if(coordinatesSize<3) return true;
+    float dy=(coordinates[0][1]-coordinates[1][1]);
+    float dx=(coordinates[0][0]-coordinates[1][0]);
+    float c=dx*coordinates[0][1]-dy*coordinates[0][0];
+    for(int i=2;i<coordinatesSize;i++)
+    {
+        if(dy*coordinates[i][0]+c!=dx*coordinates[i][1]) return false;
+    }
+    return true;
+}

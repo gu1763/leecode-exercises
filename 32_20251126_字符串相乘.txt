@@ -1,0 +1,70 @@
+给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
+
+注意：不能使用任何内置的 BigInteger 库或直接将输入转换为整数。
+
+//c
+#include <string.h>
+#include <stdlib.h>
+
+void reverse(char* s) {
+    int len = strlen(s);
+    for (int i = 0; i < len / 2; i++) {
+        char t = s[i];
+        s[i] = s[len - i - 1];
+        s[len - i - 1] = t;
+    }
+}
+
+char* multiply(char* num1, char* num2) {
+    // 处理特殊情况：其中一个为0
+    if (strcmp(num1, "0") == 0||strcmp(num2, "0") == 0) {
+        char* result = malloc(2);
+        strcpy(result, "0");
+        return result;
+    }
+    
+    int len1 = strlen(num1);
+    int len2 = strlen(num2);
+    int result_len = len1 + len2;
+    
+    // 分配并初始化结果数组
+    int* temp = calloc(result_len, sizeof(int));
+    char* result = malloc(result_len + 1);
+    
+    // 反转字符串以便从低位开始计算
+    reverse(num1);
+    reverse(num2);
+    
+    // 执行乘法运算
+    for (int i = 0; i < len1; i++) {
+        for (int j = 0; j < len2; j++) {
+            int digit1 = num1[i] - '0';
+            int digit2 = num2[j] - '0';
+            temp[i + j] += digit1 * digit2;
+        }
+    }
+    
+    // 处理进位
+    int carry = 0;
+    for (int i = 0; i < result_len; i++) {
+        int sum = temp[i] + carry;
+        temp[i] = sum % 10;
+        carry = sum / 10;
+    }
+    
+    // 找到第一个非零数字的位置（去除前导零）
+    int start = result_len - 1;
+    while (start >= 0 && temp[start] == 0) {
+        start--;
+    }
+    
+    // 转换为字符串
+    int idx = 0;
+    for (int i = start; i >= 0; i--) {
+        result[idx++] = temp[i] + '0';
+    }
+    result[idx] = '\0';
+    
+    free(temp);
+    return result;
+}

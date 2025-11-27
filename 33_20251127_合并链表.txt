@@ -1,0 +1,32 @@
+将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
+
+//c
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2) 
+{
+    struct ListNode head;
+    struct ListNode* h=&head;
+    struct ListNode *p=list1,*q=list2;
+    while(p&&q)
+    {
+        if(p->val<q->val)
+        {
+            h->next=p;
+            p=p->next;
+            h=h->next;
+        }
+        else{
+            h->next=q;
+            q=q->next;
+            h=h->next;
+        }
+    }
+    h->next=p?p:q;   		//把尚未到头的链表再加到尾部
+    return head.next; 
+}

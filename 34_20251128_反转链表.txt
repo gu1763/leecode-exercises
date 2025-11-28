@@ -1,0 +1,68 @@
+给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。
+//c
+**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* reverseList(struct ListNode* head)
+{
+    struct ListNode* p=head;
+    int i=0;
+    while(p!=NULL)
+    {
+        p=p->next;
+        i++;
+    }
+    int *list=malloc((i)*sizeof(struct ListNode));		//用一个数组存储各节点的值，会消耗较多空间
+    p=head;
+    for(int j=0;j<i;j++)
+    {
+        list[j]=p->val;
+        p=p->next;
+    }
+    p=head;
+    for(int k=0;k<i;k++)
+    {
+        p->val=list[i-1-k];
+        p=p->next;
+    }
+    return head;
+}
+
+//迭代
+struct ListNode* reverseList(struct ListNode* head) {
+    struct ListNode* prev = NULL;	//使用一个指针存储前一个结点
+    struct ListNode* curr = head;	//curr用于遍历
+    while (curr) {
+        struct ListNode* next = curr->next; 	//存储下一个节点
+        curr->next = prev;			//将下一个改为前一个，从而实现局部的倒置
+        prev = curr;				//指向前一节点的指针改为指向当前节点，用于下次倒置
+        curr = next;				//继续向前。遍历链表
+    }
+    return prev;
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/reverse-linked-list/solutions/551596/fan-zhuan-lian-biao-by-leetcode-solution-d1k2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+//递归
+struct ListNode* reverseList(struct ListNode* head) {
+    if (head == NULL || head->next == NULL) {
+        return head;
+    }
+    struct ListNode* newHead = reverseList(head->next);
+    head->next->next = head;			//将当前节点连接到反转后链表的尾部，让下一个结点指向当前节点（反转）
+    head->next = NULL;			//断开当前节点原来的链接。
+    return newHead;
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/reverse-linked-list/solutions/551596/fan-zhuan-lian-biao-by-leetcode-solution-d1k2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+递归版本稍微复杂一些，其关键在于反向工作。假设链表的其余部分已经被反转，现在应该如何反转它前面的部分？

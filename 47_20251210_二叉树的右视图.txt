@@ -1,0 +1,69 @@
+给定一个二叉树的 根节点 root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+
+ //c
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+// 辅助函数：计算最大深度
+int maxDepth(struct TreeNode* root) 
+{
+    if(root)
+    {
+        int lm = maxDepth(root->left);
+        int rm = maxDepth(root->right);
+        return 1 + (lm > rm ? lm : rm);
+    }   
+    else return 0;
+}
+
+// 全局变量或静态变量来跟踪结果数组索引
+void dfs(struct TreeNode* root, int depth, int* result, int* index)
+{
+    if(root == NULL) return;
+    
+    // 如果是当前深度的第一个节点（从右边看）
+    if(depth == *index) {
+        result[*index] = root->val;
+        (*index)++;
+    }
+    
+    // 先递归右子树，再递归左子树（关键！）
+    dfs(root->right, depth + 1, result, index);
+    dfs(root->left, depth + 1, result, index);
+}
+
+int* rightSideView(struct TreeNode* root, int* returnSize) 
+{
+    // 计算树的深度
+    int depth = maxDepth(root);
+    
+    // 如果树为空
+    if(depth == 0) {
+        *returnSize = 0;
+        return NULL;
+    }
+    
+    // 动态分配结果数组
+    int* result = (int*)malloc(depth * sizeof(int));
+    if(result == NULL) {
+        *returnSize = 0;
+        return NULL;
+    }
+    
+    // 初始化索引为0
+    int index = 0;
+    
+    // 执行深度优先搜索
+    dfs(root, 0, result, &index);
+    
+    // 设置返回大小
+    *returnSize = depth;
+    
+    return result;
+}

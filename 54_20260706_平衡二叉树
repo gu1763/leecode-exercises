@@ -1,0 +1,23 @@
+给定一个二叉树，判断它是否是 平衡二叉树  
+
+ /**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+int height(struct TreeNode* root)
+{
+    if(root==NULL) return -1;
+    int l=height(root->left);
+    int r=height(root->right);
+    if(l>=r) return l+1;
+    else return r+1;
+}
+bool isBalanced(struct TreeNode* root) {
+    if(!root) return true;
+    if(height(root->left)-height(root->right)<-1||height(root->left)-height(root->right)>1) return false;
+    else return isBalanced(root->left)&&isBalanced(root->right);
+}
